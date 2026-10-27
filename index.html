@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cravings | Premium Cafe & Restaurant</title>
+    
+    <!-- Google Fonts: Playfair Display (Serif) for headings, Montserrat (Sans-serif) for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Elegant Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0a0a0a',
+                            darker: '#050505',
+                            gold: '#D4AF37',
+                            lightGold: '#F3E5AB',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Premium Effects & Animations -->
+    <style>
+        body {
+            background-color: #050505;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        /* Gold Gradient Text */
+        .text-gold-gradient {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        /* Gold Gradient Border */
+        .border-gold-gradient {
+            position: relative;
+        }
+        .border-gold-gradient::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        /* Luxury Card Hover Effect */
+        .luxury-card {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+        .luxury-card:hover {
+            transform: translateY(-10px);
+            background: rgba(30, 30, 30, 0.8);
+            box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Scroll Reveal Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* Custom subtle background pattern */
+        .bg-pattern {
+            background-image: radial-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* SPA Fade Transition */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.6s ease forwards;
+        }
+        .view-section.active-view {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased bg-pattern">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300 py-6" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="#" onclick="switchView('home')" class="font-serif text-3xl font-bold tracking-wider text-gold-gradient uppercase">Cravings</a>
+            
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-brand-gold text-2xl" id="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Desktop Links -->
+            <div class="hidden md:flex gap-8 text-sm font-medium tracking-[0.2em] uppercase text-gray-300 items-center">
+                <button onclick="switchView('home')" class="nav-link hover:text-brand-gold transition-colors text-brand-gold">Menu & Experience</button>
+                <button onclick="switchView('reviews')" class="nav-link hover:text-brand-gold transition-colors">Location & Reviews</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black/95 z-40 hidden flex-col items-center justify-center gap-8 text-lg font-medium tracking-[0.2em] uppercase text-gray-300 backdrop-blur-md">
+        <button onclick="switchView('home'); toggleMobileMenu()" class="hover:text-brand-gold transition-colors">Menu & Experience</button>
+        <button onclick="switchView('reviews'); toggleMobileMenu()" class="hover:text-brand-gold transition-colors">Location & Reviews</button>
+    </div>
+
+    <!-- MAIN APP CONTAINER -->
+    <main>
+        
+        <!-- ========================================== -->
+        <!-- PAGE 1: HOME & MENU VIEW                   -->
+        <!-- ========================================== -->
+        <div id="view-home" class="view-section active-view">
+            <!-- Hero Section -->
+            <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-brand-gold rounded-full blur-[150px] opacity-10 pointer-events-none"></div>
+                
+                <div class="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center">
+                    <p class="text-brand-gold tracking-[0.3em] text-sm md:text-base uppercase mb-6 reveal">Welcome to Chopati's Finest</p>
+                    <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl mb-8 leading-tight reveal reveal-delay-1">
+                        A Taste of <br><span class="text-gold-gradient italic">Elegance</span>
+                    </h1>
+                    <p class="text-gray-400 font-light text-lg md:text-xl max-w-2xl mb-12 reveal reveal-delay-2">
+                        Experience culinary perfection in a beautifully crafted atmosphere. Every dish is a masterpiece, every visit is a memory.
+                    </p>
+                    <div class="flex flex-col items-center gap-4 reveal reveal-delay-3">
+                        <button onclick="document.getElementById('menu').scrollIntoView({behavior: 'smooth'})" class="border border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-dark transition-all duration-300 px-10 py-4 uppercase tracking-widest text-sm">
+                            Discover Our Menu
+                        </button>
+                        <p class="mt-6 text-sm text-gray-500 tracking-widest uppercase"><i class="far fa-clock text-brand-gold mr-2"></i> Open Daily: 9:00 AM — 11:00 PM</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- The Experience (About) -->
+            <section id="about" class="py-24 md:py-32 relative border-t border-white/5">
+                <div class="max-w-7xl mx-auto px-6 md:px-12">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                        <div class="reveal">
+                            <div class="relative w-full aspect-[4/5] border-gold-gradient rounded-sm overflow-hidden group">
+                                <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Cravings Ambience" class="object-cover w-full h-full opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                                <p class="absolute bottom-6 left-6 text-brand-gold font-serif italic text-xl">The Cravings Vibe</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center reveal reveal-delay-1">
+                            <h2 class="text-brand-gold tracking-[0.2em] text-sm uppercase mb-4">The Atmosphere</h2>
+                            <h3 class="font-serif text-4xl md:text-5xl mb-8 leading-tight">An aesthetic that <br>complements the taste.</h3>
+                            <p class="text-gray-400 font-light leading-relaxed mb-6">
+                                Located in the heart of Chopati, Cravings is more than just a restaurant and cafe; it is a destination. We have meticulously designed our space with a stunning theme that provides the perfect backdrop for your dining experience. 
+                            </p>
+                            <p class="text-gray-400 font-light leading-relaxed mb-10">
+                                Whether you are indulging in our legendary local favorites or enjoying a premium shake, our refined environment ensures that every moment spent here feels exclusive and extraordinary.
+                            </p>
+                            <div class="flex items-center gap-4">
+                                <span class="h-[1px] w-12 bg-brand-gold"></span>
+                                <span class="font-serif italic text-xl text-gray-300">Exclusively Offline</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Signature Menu Section -->
+            <section id="menu" class="py-24 md:py-32 bg-brand-darker relative">
+                <div class="max-w-7xl mx-auto px-6 md:px-12">
+                    <div class="text-center mb-20 reveal">
+                        <p class="text-brand-gold tracking-[0.2em] text-sm uppercase mb-4">Culinary Masterpieces</p>
+                        <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl">Signature Menu</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Menu Item 1: Idli Sambar -->
+                        <div class="luxury-card p-6 rounded-sm border border-white/5 border-gold-gradient flex flex-col h-full reveal reveal-delay-1 overflow-hidden">
+                            <div class="w-full h-48 mb-6 overflow-hidden rounded-sm relative">
+                                <img src="images/idli.jpg" alt="Idli Sambar" class="object-cover w-full h-full hover:scale-110 transition-transform duration-500">
+                                <div class="absolute top-2 right-2 bg-black/80 px-3 py-1 text-xs text-brand-gold border border-brand-gold/30 backdrop-blur-sm">₹10</div>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-2xl mb-1 text-gray-100">South Indian Delight</h3>
+                                <p class="text-brand-gold italic font-serif mb-4">Idli Sambar</p>
+                            </div>
+                            <p class="text-gray-400 font-light text-sm flex-grow mb-6">
+                                Our undisputed local legend. Steamed to soft perfection and served with our deeply flavorful, authentic sambar.
+                            </p>
+                            <div class="border-t border-white/10 pt-4 flex items-center gap-3">
+                                <i class="fa-solid fa-fire text-orange-500"></i>
+                                <span class="text-xs tracking-wider uppercase text-gray-300">Bestseller: 500+ Sold Daily</span>
+                            </div>
+                        </div>
+
+                        <!-- Menu Item 2: Chhole Kulchhe -->
+                        <div class="luxury-card p-6 rounded-sm border border-white/5 border-gold-gradient flex flex-col h-full reveal reveal-delay-2 overflow-hidden">
+                            <div class="w-full h-48 mb-6 overflow-hidden rounded-sm">
+                                <img src="images/chole.jpg" alt="Chhole Kulchhe" class="object-cover w-full h-full hover:scale-110 transition-transform duration-500">
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-2xl mb-1 text-gray-100">The Classic</h3>
+                                <p class="text-brand-gold italic font-serif mb-4">Chhole Kulchhe</p>
+                            </div>
+                            <p class="text-gray-400 font-light text-sm flex-grow mb-6">
+                                Rich, spiced chhole paired with warm, fluffy kulchas. A hearty and satisfying culinary tradition.
+                            </p>
+                            <div class="flex flex-col gap-3 mt-auto">
+                                <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                    <span class="text-sm tracking-wider uppercase text-gray-300">Regular</span>
+                                    <span class="text-lg text-brand-lightGold">₹40</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm tracking-wider uppercase text-brand-gold">With Butter</span>
+                                    <span class="text-lg text-brand-lightGold">₹60</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Menu Item 3: Shakes -->
+                        <div class="luxury-card p-6 rounded-sm border border-white/5 border-gold-gradient flex flex-col h-full reveal reveal-delay-3 overflow-hidden">
+                            <div class="w-full h-48 mb-6 overflow-hidden rounded-sm relative">
+                                <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Premium Shakes" class="object-cover w-full h-full hover:scale-110 transition-transform duration-500">
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-2xl mb-1 text-gray-100">The Indulgence</h3>
+                                <p class="text-brand-gold italic font-serif mb-4">Premium Shakes</p>
+                            </div>
+                            <p class="text-gray-400 font-light text-sm flex-grow mb-6">
+                                Thick, creamy, and visually spectacular. Handcrafted with premium ingredients to satisfy your sweet cravings.
+                            </p>
+                            <div class="border-t border-white/10 pt-4 flex items-center gap-3">
+                                <i class="fa-solid fa-star text-brand-gold"></i>
+                                <span class="text-xs tracking-wider uppercase text-gray-300">Crowd Favorite: 100+ Sold Daily</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- House Policies (Etiquette) -->
+            <section id="etiquette" class="py-24 md:py-32 relative border-t border-white/5 bg-brand-dark">
+                <div class="max-w-7xl mx-auto px-6 md:px-12">
+                    <div class="text-center mb-16 reveal">
+                        <h2 class="font-serif text-3xl md:text-5xl mb-4">House Etiquette</h2>
+                        <div class="w-16 h-[1px] bg-brand-gold mx-auto"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                        <div class="flex flex-col items-center reveal reveal-delay-1">
+                            <div class="w-16 h-16 rounded-full border border-brand-gold flex items-center justify-center mb-6 text-brand-gold text-2xl">
+                                <i class="fa-solid fa-store"></i>
+                            </div>
+                            <h4 class="font-serif text-xl mb-3">Exclusive Offline Experience</h4>
+                            <p class="text-gray-500 font-light text-sm">To preserve the quality of our service and the ambiance of our theme, our services are strictly for dine-in guests.</p>
+                        </div>
+                        
+                        <div class="flex flex-col items-center reveal reveal-delay-2">
+                            <div class="w-16 h-16 rounded-full border border-brand-gold flex items-center justify-center mb-6 text-brand-gold text-2xl">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <h4 class="font-serif text-xl mb-3">Refined Atmosphere</h4>
+                            <p class="text-gray-500 font-light text-sm">We cultivate an elegant environment. Polite and respectful behavior is expected from all our esteemed patrons.</p>
+                        </div>
+
+                        <div class="flex flex-col items-center reveal reveal-delay-3">
+                            <div class="w-16 h-16 rounded-full border border-brand-gold flex items-center justify-center mb-6 text-brand-gold text-2xl">
+                                <i class="fa-solid fa-ban"></i>
+                            </div>
+                            <h4 class="font-serif text-xl mb-3">No Outside Food</h4>
+                            <p class="text-gray-500 font-light text-sm">To ensure the integrity of our culinary offerings, outside food and beverages are strictly prohibited inside the premises.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- PAGE 2: LOCATION & REVIEWS VIEW            -->
+        <!-- ========================================== -->
+        <div id="view-reviews" class="view-section py-32 min-h-screen">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                
+                <div class="text-center mb-16">
+                    <p class="text-brand-gold tracking-[0.2em] text-sm uppercase mb-4">Discover</p>
+                    <h2 class="font-serif text-4xl md:text-6xl mb-4">Location & Reviews</h2>
+                    <div class="flex justify-center items-center gap-2 text-2xl text-brand-gold mb-4">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                        <span class="text-gray-300 font-serif ml-2">4.9 on Google</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24">
+                    <!-- Location Info -->
+                    <div class="luxury-card p-10 rounded-sm border-gold-gradient">
+                        <h3 class="font-serif text-3xl mb-8 border-b border-white/10 pb-4">Find Us</h3>
+                        <ul class="space-y-6">
+                            <li class="flex items-start gap-4">
+                                <i class="fa-solid fa-location-dot text-brand-gold mt-1 text-xl"></i>
+                                <div>
+                                    <h4 class="text-gray-200 font-medium mb-1">Address</h4>
+                                    <p class="text-gray-400 font-light">Chopati Restaurant & Cafe Area<br>Dabra, Madhya Pradesh<br>India</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <i class="fa-solid fa-clock text-brand-gold mt-1 text-xl"></i>
+                                <div>
+                                    <h4 class="text-gray-200 font-medium mb-1">Hours</h4>
+                                    <p class="text-gray-400 font-light">Monday - Sunday<br>9:00 AM - 11:00 PM</p>
+                                </div>
+                            </li>
+                        </ul>
+                        
+                        <!-- Mini Photo Gallery (Google style) -->
+                        <div class="mt-10 pt-8 border-t border-white/10">
+                            <h4 class="text-brand-gold text-sm tracking-widest uppercase mb-4">From our Customers</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Cafe Interior" class="w-full h-32 object-cover rounded-sm hover:opacity-80 transition-opacity cursor-pointer">
+                                <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Coffee and Food" class="w-full h-32 object-cover rounded-sm hover:opacity-80 transition-opacity cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews -->
+                    <div class="space-y-6">
+                        <!-- Review 1 -->
+                        <div class="bg-white/5 p-6 rounded-sm border border-white/10 hover:border-brand-gold/50 transition-colors">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-brand-gold flex items-center justify-center text-black font-bold">R</div>
+                                    <div>
+                                        <h5 class="text-gray-200 font-medium">Rahul Sharma</h5>
+                                        <p class="text-xs text-gray-500">Local Guide • 14 reviews</p>
+                                    </div>
+                                </div>
+                                <div class="text-brand-gold text-sm">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="text-gray-400 font-light text-sm italic">"Best Idli Sambar in Dabra without a doubt! The cafe's dark luxury theme is stunning. Hard to believe they serve such premium food at ₹10. Shakes are also top-notch. Highly recommend!"</p>
+                        </div>
+                        
+                        <!-- Review 2 -->
+                        <div class="bg-white/5 p-6 rounded-sm border border-white/10 hover:border-brand-gold/50 transition-colors">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-white font-bold">P</div>
+                                    <div>
+                                        <h5 class="text-gray-200 font-medium">Priya Singh</h5>
+                                        <p class="text-xs text-gray-500">2 reviews</p>
+                                    </div>
+                                </div>
+                                <div class="text-brand-gold text-sm">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="text-gray-400 font-light text-sm italic">"The ambiance is just wow! Very disciplined place (no outside food allowed which is good). Chhole Kulchhe with butter for ₹60 is a steal for the quality. Beautiful place to hang out at Chopati."</p>
+                        </div>
+
+                        <!-- Review 3 -->
+                        <div class="bg-white/5 p-6 rounded-sm border border-white/10 hover:border-brand-gold/50 transition-colors">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-brand-lightGold flex items-center justify-center text-black font-bold">A</div>
+                                    <div>
+                                        <h5 class="text-gray-200 font-medium">Amit Verma</h5>
+                                        <p class="text-xs text-gray-500">Local Guide • 32 reviews</p>
+                                    </div>
+                                </div>
+                                <div class="text-brand-gold text-sm">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="text-gray-400 font-light text-sm italic">"Amazing shakes, easily sell out fast so go early. The behavior of the staff is very polite and respectful. Great offline experience, away from the digital rush."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 flex flex-col items-center">
+            <h2 class="font-serif text-3xl font-bold tracking-wider text-gold-gradient uppercase mb-6">Cravings</h2>
+            
+            <div class="flex flex-col items-center text-center gap-2 mb-8">
+                <p class="text-gray-400 text-sm tracking-widest uppercase"><i class="fa-solid fa-location-dot text-brand-gold mr-2"></i> Chopati Restaurant & Cafe, Dabra</p>
+                <p class="text-gray-500 text-xs tracking-widest uppercase">Open 9:00 AM — 11:00 PM</p>
+            </div>
+
+            <div class="flex gap-6 mb-10">
+                <a href="#" class="text-gray-500 hover:text-brand-gold transition-colors"><i class="fa-brands fa-instagram text-xl"></i></a>
+                <a href="#" class="text-gray-500 hover:text-brand-gold transition-colors"><i class="fa-brands fa-facebook text-xl"></i></a>
+            </div>
+
+            <p class="text-xs text-gray-600 font-light">&copy; 2026 Cravings Cafe. All rights reserved. Designed for Elegance.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Interactions -->
+    <script>
+        // SPA View Switcher
+        function switchView(viewId) {
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(el => {
+                el.classList.remove('active-view');
+            });
+            // Show targeted view
+            document.getElementById('view-' + viewId).classList.add('active-view');
+            
+            // Update active state on nav links
+            document.querySelectorAll('.nav-link').forEach(el => {
+                el.classList.remove('text-brand-gold');
+                if(el.textContent.toLowerCase().includes(viewId === 'home' ? 'menu' : 'location')) {
+                    el.classList.add('text-brand-gold');
+                }
+            });
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Re-trigger reveal animations if entering home view
+            if(viewId === 'home') {
+                setTimeout(initializeReveals, 100);
+            }
+        }
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('flex');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-black/90', 'backdrop-blur-md', 'shadow-lg', 'border-b', 'border-white/5');
+                navbar.classList.remove('py-6');
+                navbar.classList.add('py-4');
+            } else {
+                navbar.classList.remove('bg-black/90', 'backdrop-blur-md', 'shadow-lg', 'border-b', 'border-white/5');
+                navbar.classList.add('py-6');
+                navbar.classList.remove('py-4');
+            }
+        });
+
+        // Intersection Observer for Scroll Reveal Animations
+        function initializeReveals() {
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach(el => {
+                // Reset for re-triggering
+                el.classList.remove('active');
+                revealOnScroll.observe(el);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeReveals);
+    </script>
+</body>
+</html>
